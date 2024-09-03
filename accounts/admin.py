@@ -9,8 +9,8 @@ class UserAdmin(admin.ModelAdmin):
         "id",
         "username",
         "email",
-        "is_staff",
         "is_active",
+        "is_staff",
         "is_superuser",
     )
     list_filter = (

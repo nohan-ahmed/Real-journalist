@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'education',
     'languages',
     # Third party apps
+    'rest_framework',
     # Default apps
     'django.contrib.admin',
     'django.contrib.auth',
