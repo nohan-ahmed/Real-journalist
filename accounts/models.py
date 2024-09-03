@@ -7,7 +7,7 @@ from .utils import COUNTRIES
 class User(AbstractUser):
     profile_image = models.ImageField(upload_to='accounts/media/images', default='static/images/default_avatar.png')
     email = models.EmailField(unique=True, max_length=254)
-    date_of_brith = models.DateField()
+    date_of_birth = models.DateField(null=True, blank=True)
     bio = models.TextField(null=True, blank=True)
     
     USERNAME_FIELD = 'email'

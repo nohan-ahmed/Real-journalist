@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-AUTH_USER_MODEL = 'account.User'
+AUTH_USER_MODEL = 'accounts.User'
 
 # Application definition
 
@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'categories',
     'posts',
     'education',
-    'Llanguages',
+    'languages',
     # Third party apps
     # Default apps
     'django.contrib.admin',
