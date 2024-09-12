@@ -2,12 +2,16 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
-
 from rest_framework.routers import DefaultRouter
+
 from django.urls import path, include
 from . import views
 
+router = DefaultRouter()
+router.register('user-address', views.UserAddressAPIView, basename="user-address")
+
 urlpatterns = [
+    path('',include(router.urls)),
     path('register/', views.RegisterAPIView.as_view(), name='register'),
     path('email-verification/<uid>/<token>/', views.VerifyEmailView.as_view(), name='email-verification'),
     path('login/', TokenObtainPairView.as_view(), name='login'),

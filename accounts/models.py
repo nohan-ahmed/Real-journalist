@@ -23,4 +23,5 @@ class UserAddress(models.Model):
     country = models.CharField(max_length=250, choices=COUNTRIES)
     city = models.CharField(max_length=250)
     zip_code = models.IntegerField()
-    create_at = models.DateTimeField(auto_now_add=False)
+    create_at = models.DateTimeField(auto_now_add=True)
+    

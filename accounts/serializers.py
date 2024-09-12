@@ -109,4 +109,11 @@ class PasswordResetSerializer(serializers.Serializer):
         
         return attrs
     
-        
+class UserAddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.UserAddress
+        fields = ['user','country','city', 'zip_code']
+        extra_kwargs = {
+            "user": {"read_only": True},
+        }
+

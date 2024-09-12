@@ -10,6 +10,7 @@ from django.conf import settings
 # DRF
 from rest_framework.views import APIView
 from rest_framework.generics import RetrieveUpdateDestroyAPIView
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
@@ -124,3 +125,11 @@ class UserLogoutAPIView(APIView):
         
         except Exception as e:
             return Response({"error": "Invalid refresh token"}, status=status.HTTP_400_BAD_REQUEST)
+        
+class UserAddressAPIView(ModelViewSet):
+    queryset = models.UserAddress.objects.all()
+    serializer_class = serializers.UserAddressSerializer
+    
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+        
