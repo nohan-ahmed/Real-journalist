@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from .managers import Manager
-from .utils import COUNTRIES
+from .constants import COUNTRIES
 # Create your models here.
 
 class User(AbstractUser):
