@@ -14,15 +14,19 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.throttling import UserRateThrottle, ScopedRateThrottle
 from rest_framework_simplejwt.tokens import RefreshToken
 # Imports local modules
 from . import models
 from . import serializers
 from .utils import get_tokens_for_user
+from .permistions import IsOwnerOrReadOnly, UserAddressIsOwnerOrReadOnly
 # Create your views here.
 
 
 class RegisterAPIView(APIView):
+    throttle_classes = [ScopedRateThrottle]
+    scope = 'RegistrationAPI'
     def post(self, request, format=None):
         serializer = serializers.RegistrationSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -46,6 +50,8 @@ class RegisterAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class VerifyEmailView(APIView):
+    throttle_classes = [ScopedRateThrottle]
+    scope = 'RegistrationAPI'
     def get(self, request, uid, token, format=None):
         try:
             user_id = smart_str(urlsafe_base64_decode(uid))
@@ -64,9 +70,14 @@ class VerifyEmailView(APIView):
 class ProfileView(RetrieveUpdateDestroyAPIView):
     queryset= models.User.objects.all()
     serializer_class = serializers.UserSerializer
-
+    throttle_classes = [UserRateThrottle]
+    permission_classes = [IsOwnerOrReadOnly]
+    
 class PasswordChangeView(APIView):
+    throttle_classes = [ScopedRateThrottle]
+    scope = 'PasswordChangeAPI'
     permission_classes=[IsAuthenticated]
+    
     def put(self, request, format=None):
         serializer = serializers.ChangePasswordSerializer(data=request.data, context={'request':request})
         if serializer.is_valid(raise_exception=True):
@@ -75,6 +86,9 @@ class PasswordChangeView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class PasswordResetRequestAPIView(APIView):
+    throttle_classes = [ScopedRateThrottle]
+    scope = 'RegistrationAPI'
+    
     def post(self, request, format=None):
         serializer= serializers.PasswordResetRequestSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
@@ -99,6 +113,9 @@ class PasswordResetRequestAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class PasswordResetConfirmationAPIView(APIView):
+    throttle_classes = [ScopedRateThrottle]
+    scope = 'RegistrationAPI'
+    
     def post(self, request, uid, token, format=None):
         user_id = urlsafe_base64_decode(smart_str(uid))
         user = models.User.objects.get(pk=user_id)
@@ -116,6 +133,10 @@ class PasswordResetConfirmationAPIView(APIView):
             return Response({"error": "Invalid token or user ID."}, status=status.HTTP_400_BAD_REQUEST)
 
 class UserLogoutAPIView(APIView):
+    throttle_classes = [ScopedRateThrottle]
+    scope = 'RegistrationAPI'
+    permission_classes = [IsAuthenticated]
+    
     def post(self, request, format=None):
         try:
             refresh_token = request.data["refresh"]
@@ -129,7 +150,8 @@ class UserLogoutAPIView(APIView):
 class UserAddressAPIView(ModelViewSet):
     queryset = models.UserAddress.objects.all()
     serializer_class = serializers.UserAddressSerializer
-    
+    throttle_classes = [UserRateThrottle]
+    permission_classes = [UserAddressIsOwnerOrReadOnly]
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
         
