@@ -69,3 +69,4 @@ class Subscription(models.Model):
 
     def __str__(self):
         return f'{self.subscriber.username} subscribed to {self.subscribed_to.user}'
+    
