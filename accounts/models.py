@@ -29,7 +29,7 @@ class UserAddress(models.Model):
     
 class Specialization(models.Model):
     name = models.CharField(max_length=250,unique=True)
-    slug = models.SlugField(max_length=250)
+    slug = models.SlugField(max_length=250, unique=True, blank=True, null=True)
     created_at = models.DateTimeField( auto_now_add=True)
     def __str__(self):
         return self.name

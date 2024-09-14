@@ -9,6 +9,7 @@ from . import views
 
 router = DefaultRouter()
 router.register('user-address', views.UserAddressAPIView, basename="user-address")
+router.register('specialization', views.SpecializationAPIView, basename='specialization')
 
 urlpatterns = [
     path('',include(router.urls)),

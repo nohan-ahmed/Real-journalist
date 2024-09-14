@@ -117,3 +117,7 @@ class UserAddressSerializer(serializers.ModelSerializer):
             "user": {"read_only": True},
         }
 
+class SpecializationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Specialization
+        fields = '__all__'

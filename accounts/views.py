@@ -20,7 +20,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from . import models
 from . import serializers
 from .utils import get_tokens_for_user
-from .permistions import IsOwnerOrReadOnly, UserAddressIsOwnerOrReadOnly
+from .permistions import IsOwnerOrReadOnly, UserAddressIsOwnerOrReadOnly, IsAdminOrReadOnly
 # Create your views here.
 
 
@@ -154,4 +154,9 @@ class UserAddressAPIView(ModelViewSet):
     permission_classes = [UserAddressIsOwnerOrReadOnly]
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
-        
+    
+class SpecializationAPIView(ModelViewSet):
+    queryset = models.Specialization.objects.all()
+    serializer_class = serializers.SpecializationSerializer
+    throttle_classes = [UserRateThrottle]
+    permission_classes= [IsAdminOrReadOnly]

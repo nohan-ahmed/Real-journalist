@@ -1,5 +1,6 @@
 from rest_framework import permissions
 
+
 class IsOwnerOrReadOnly(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         # Read permissions are allowed to any request,
@@ -9,7 +10,7 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 
         # Instance must have an attribute named `owner`.
         return obj == request.user
-    
+
 
 class UserAddressIsOwnerOrReadOnly(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
@@ -20,3 +21,8 @@ class UserAddressIsOwnerOrReadOnly(permissions.BasePermission):
 
         # returns true if the object and request.user's UserInfo object is same. otherwise false.
         return obj.user == request.user
+
+
+class IsAdminOrReadOnly(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return True if request.user.is_staff ==True else False
