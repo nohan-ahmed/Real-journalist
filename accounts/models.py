@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from .managers import Manager
-from .constants import COUNTRIES
+from .constants import COUNTRIES, LANGUAGES
 # Create your models here.
 
 class User(AbstractUser):
@@ -24,4 +24,30 @@ class UserAddress(models.Model):
     city = models.CharField(max_length=250)
     zip_code = models.IntegerField()
     create_at = models.DateTimeField(auto_now_add=True)
+    def __str__(self) -> str:
+        return f"Country: {self.country}, City: {self.city}"
     
+class Specialization(models.Model):
+    name = models.CharField(max_length=250,unique=True)
+    slug = models.SlugField(max_length=250)
+    created_at = models.DateTimeField( auto_now_add=True)
+    def __str__(self):
+        return self.name
+    
+class Journalist(models.Model):
+    user = models.OneToOneField(to=User, related_name='journalist', on_delete=models.CASCADE)
+    specialization = models.ManyToManyField(to=Specialization)
+    languages = models.CharField(max_length=100, choices=LANGUAGES)
+    awards = models.CharField(max_length=250, blank=True, null=True)
+    def __str__(self):
+        return f'{self.user}'
+    
+class Education(models.Model):
+    journalist = models.ForeignKey(to=Journalist, on_delete=models.CASCADE, related_name='educations')
+    institute = models.CharField(max_length=250)
+    degree_type = models.CharField(max_length=250)
+    field_of_study = models.CharField(max_length=250)
+    start_year = models.DateField()
+    end_year = models.DateField()
+    def __str__(self) -> str:
+        return self.degree_type
