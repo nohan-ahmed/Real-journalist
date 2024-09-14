@@ -155,6 +155,7 @@ REST_FRAMEWORK = {
         "user": "100/minute",
         "RegistrationAPI": "100/day",
         "PasswordChangeAPI": "5/day",
+        "SubscriptionAPI": "10000/day",
     },
 }
 

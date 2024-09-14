@@ -187,3 +187,24 @@ class JournalistAPIView(ModelViewSet):
             
         send_mail(subject, strip_tags(message), settings.DEFAULT_FROM_EMAIL, [user.email])
         
+class SubscriptionAPIView(APIView):
+    throttle_classes = [ScopedRateThrottle]
+    scope = 'SubscriptionAPI'
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request, format=None):
+        serializer = serializers.SubscriptionSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            subscriber=request.user
+            subscribed_to = serializer.validated_data.get('subscribed_to')
+            
+            subscribe = models.Subscription.objects.filter(subscriber=subscriber, subscribed_to=subscribed_to).first()
+            
+            if subscribe is not None:
+                subscribe.delete()
+                return Response({'message':f'{subscriber} unsubscribed to {subscribed_to}'}, status=status.HTTP_204_NO_CONTENT)
+            
+            serializer.save(subscriber=subscriber) # if subscriber didn't follow this account it will create new instance for Subscription model
+            return Response({'message':f'{subscriber} subscribed to {subscribed_to}'}, status=status.HTTP_204_NO_CONTENT)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    

@@ -52,4 +52,3 @@ class SubscriptionAdmin(admin.ModelAdmin):
     list_display = ['id', 'subscriber', 'subscribed_to']
     search_fields =['id', 'subscriber', 'subscribed_to']
 
-
