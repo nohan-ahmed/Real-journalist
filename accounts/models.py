@@ -48,7 +48,7 @@ class Journalist(models.Model):
     languages = models.CharField(max_length=100, choices=LANGUAGES)
     awards = models.CharField(max_length=250, blank=True, null=True)
     def __str__(self):
-        return f'{self.user}'
+        return f'{self.user.username}'
     
 class Education(models.Model):
     journalist = models.ForeignKey(to=Journalist, on_delete=models.CASCADE, related_name='educations')

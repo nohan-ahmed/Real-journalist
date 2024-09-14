@@ -43,11 +43,9 @@ class JournalistAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'get_specializations','languages', 'awards']
     list_filter = ['specialization','languages', 'awards']
     search_fields =['id', 'user', 'specialization','languages', 'awards']
-    ordering = ['specialization']
     
     def get_specializations(self, obj):
-        return ", ".join([specialization.name for specialization in obj.specialization.all()])
-    get_specializations.short_description = 'Specializations'
+        return obj.specialization.all()[0]
     
 @admin.register(models.Subscription)
 class SubscriptionAdmin(admin.ModelAdmin):

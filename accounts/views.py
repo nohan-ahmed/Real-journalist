@@ -6,6 +6,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, smart_str
 from django.utils import timezone
 from django.conf import settings
+from django.shortcuts import get_object_or_404
 
 # DRF
 from rest_framework.views import APIView
@@ -16,6 +17,8 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.throttling import UserRateThrottle, ScopedRateThrottle
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.exceptions import ValidationError
+
 # Imports local modules
 from . import models
 from . import serializers
@@ -169,4 +172,18 @@ class JournalistAPIView(ModelViewSet):
     permission_classes = [ObjectIsOwnerOrReadOnly]
     
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        user = self.request.user
+
+        # Check if a Journalist instance already exists for this user
+        if models.Journalist.objects.filter(user=user).exists():
+            raise ValidationError({"detail": "Journalist profile already exists for this user."})
+
+        # If it doesn't exist, create a new instance
+        serializer.save(user=user)
+        subject = "Welcome to Real-Journalist – Your Journalist Account is Now Live!"
+        message = render_to_string('./accounts/Journalist_account_create_email.html',{
+                'user':user,
+            })
+            
+        send_mail(subject, strip_tags(message), settings.DEFAULT_FROM_EMAIL, [user.email])
+        
