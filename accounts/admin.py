@@ -48,3 +48,10 @@ class JournalistAdmin(admin.ModelAdmin):
     def get_specializations(self, obj):
         return ", ".join([specialization.name for specialization in obj.specialization.all()])
     get_specializations.short_description = 'Specializations'
+    
+@admin.register(models.Subscription)
+class SubscriptionAdmin(admin.ModelAdmin):
+    list_display = ['id', 'subscriber', 'subscribed_to']
+    search_fields =['id', 'subscriber', 'subscribed_to']
+
+
