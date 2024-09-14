@@ -51,3 +51,13 @@ class Education(models.Model):
     end_year = models.DateField()
     def __str__(self) -> str:
         return self.degree_type
+    
+class Subscription(models.Model):
+    subscriber = models.ForeignKey(User, related_name='subscriptions', on_delete=models.CASCADE)
+    subscribed_to = models.ForeignKey(to=Journalist, related_name='subscribers', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        unique_together = ('subscriber', 'subscribed_to')
+
+    def __str__(self):
+        return f'{self.subscriber.username} subscribed to {self.subscribed_to.user}'
