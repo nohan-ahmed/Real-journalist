@@ -10,7 +10,7 @@ from . import views
 router = DefaultRouter()
 router.register('user-address', views.UserAddressAPIView, basename="user-address")
 router.register('specialization', views.SpecializationAPIView, basename='specialization')
-
+router.register('journalist', views.JournalistAPIView, basename='journalist')
 urlpatterns = [
     path('',include(router.urls)),
     path('register/', views.RegisterAPIView.as_view(), name='register'),
