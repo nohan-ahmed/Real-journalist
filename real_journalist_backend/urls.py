@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
     path('user/', include('accounts.urls')),
+    path('category/', include('categories.urls')),
 ]
 
 # Add the following code to the serving media file at development time.
