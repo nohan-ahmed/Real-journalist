@@ -61,7 +61,6 @@ class ChangePasswordSerializer(serializers.Serializer):
             raise serializers.ValidationError('Old password is incorrect.')
         return value
     
-    
     def validate(self, attrs):
         new_password = attrs.get("new_password")
         confirm_password = attrs.get("confirm_password")
@@ -139,4 +138,4 @@ class SubscriptionSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             "subscriber": {"read_only": True},
         }
-        
+
