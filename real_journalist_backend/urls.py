@@ -24,6 +24,7 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     path('user/', include('accounts.urls')),
     path('category/', include('categories.urls')),
+    path('journalist/', include('journalists.urls')),
 ]
 
 # Add the following code to the serving media file at development time.
