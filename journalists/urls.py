@@ -5,7 +5,7 @@ from . import views
 
 router = DefaultRouter()
 router.register('specialization', views.SpecializationAPIView, basename='specialization')
-router.register('journalist', views.JournalistAPIView, basename='journalist')
+router.register('', views.JournalistAPIView, basename='journalist')
 
 urlpatterns = [
     path('',include(router.urls)),
